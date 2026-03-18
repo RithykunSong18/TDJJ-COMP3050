@@ -1,4 +1,12 @@
-FROM eclipse-temurin:17-jdk
-WORKDIR /app
-EXPOSE 8000
-CMD ["java", "Test"]
+FROM eclipse-temurin:18-jdk
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    maven \
+    git \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Verify installations
+RUN java --version && mvn --version && git --version
+
+WORKDIR /workspace
