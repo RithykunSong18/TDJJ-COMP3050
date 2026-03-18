@@ -1,0 +1,49 @@
+{
+  "y": 10,
+  "x": 10,
+  "top": 0,
+  "left": 0,
+  "bottom": 19,
+  "right": 19,
+  "info": [
+    ["S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S"],
+    ["S","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","S"],
+    ["S","g","W","W","W","g","g","t","t","g","g","W","W","g","g","t","g","g","g","S"],
+    ["S","g","W","g","W","g","_","_","g","g","g","W","g","g","g","t","g","W","g","S"],
+    ["S","g","W","g","W","g","_","_","g","g","g","W","g",".","g","g","g","W","g","S"],
+    ["S","g","g","g","g","g","_","_","g","g","g","g","g","g","g","g","g","W","g","S"],
+    ["S","g","t","t","g","g","g","g","g","W","W","W","g","g","t","t","g","W","g","S"],
+    ["S","g","g","t","g","g","g","g","g","W","g","W","g","g","g","g","g","W","g","S"],
+    ["S","g","g","g","g","g","g","g","g","W","g","W","g","g","g","g","g","W","g","S"],
+    ["S","g","g","g","g","g","t","t","g","g","g","g","g","t","t","g","g","W","g","S"],
+    ["S","g","g","g","g","g","t","g","g","g","g","g","g","g","g","g","g","W","g","S"],
+    ["S","g","W","W","W","g","g","g","g","g","W","W","W","g","g","g","g","W","g","S"],
+    ["S","g","W","g","W","g","g","g","g","g","W","g","W","g","g","g","g","W","g","S"],
+    ["S","g","W","g","W","g","g","g","g","g","W","g","W","g","g","g","g","W","g","S"],
+    ["S","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","S"],
+    ["S","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","S"],
+    ["S","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","S"],
+    ["S","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","S"],
+    ["S","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","S"],
+    ["S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S"]
+  ]
+}
+
+Letter or symbol    Tile kind       Blocks movement?
+B                   brick wall      blocking
+b                   bridge          -
+D                   doors closed    blocking
+d                   doors opened    -
+_                   dirt            -
+f                   flagstones      -
+g                   grass           -
+p                   pebbles         -
+.                   one rock        -
+,                   two rocks       -
+:                   three rocks     -
+;                   six rocks       -
+S                   stone wall      blocking
+s                   sand            -
+t                   tree            -
+W                   water waves     blocking
+w                   wooden boards   -
