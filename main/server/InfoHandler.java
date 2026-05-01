@@ -4,12 +4,11 @@ import java.nio.charset.StandardCharsets;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
-public class MoveHandler implements HttpHandler {
-
+public class InfoHandler implements HttpHandler {
     private final TileMap tileMap;
     private final GameState gameState;
 
-    public MoveHandler(TileMap tileMap, GameState gameState) {
+    public InfoHandler(TileMap tileMap, GameState gameState) {
         this.tileMap = tileMap;
         this.gameState = gameState;
     }
@@ -25,8 +24,8 @@ public class MoveHandler implements HttpHandler {
             return;
         }
 
-        int dy = 0;
-        int dx = 0;
+        Integer requestY = null;
+        Integer requestX = null;
 
         String query = exchange.getRequestURI().getQuery();
         if (query != null) {
@@ -34,8 +33,8 @@ public class MoveHandler implements HttpHandler {
                 String[] kv = part.split("=", 2);
                 if (kv.length == 2) {
                     try {
-                        if (kv[0].equals("dy")) dy = Integer.parseInt(kv[1]);
-                        else if (kv[0].equals("dx")) dx = Integer.parseInt(kv[1]);
+                        if ("y".equals(kv[0])) requestY = Integer.parseInt(kv[1]);
+                        else if ("x".equals(kv[0])) requestX = Integer.parseInt(kv[1]);
                     } catch (NumberFormatException e) {
                         exchange.sendResponseHeaders(204, -1);
                         exchange.close();
@@ -45,31 +44,46 @@ public class MoveHandler implements HttpHandler {
             }
         }
 
-        if (dy != 0 && dx != 0) {
+        if (requestY == null || requestX == null) {
             exchange.sendResponseHeaders(204, -1);
             exchange.close();
             return;
         }
 
-        if (Math.abs(dy) > 1 || Math.abs(dx) > 1) {
+        if (requestY != gameState.getPlayerY() || requestX != gameState.getPlayerX()) {
             exchange.sendResponseHeaders(204, -1);
             exchange.close();
             return;
         }
 
-        int newY = gameState.getPlayerY() + dy;
-        int newX = gameState.getPlayerX() + dx;
+        int top = Math.max(0, requestY - 5);
+        int left = Math.max(0, requestX - 5);
+        int bottom = Math.min(tileMap.getHeight() - 1, requestY + 5);
+        int right = Math.min(tileMap.getWidth() - 1, requestX + 5);
 
-        if (tileMap.isBlocking(newY, newX)) {
-            exchange.sendResponseHeaders(204, -1);
-            exchange.close();
-            return;
+        StringBuilder json = new StringBuilder();
+        json.append("{");
+        json.append("\"y\":").append(requestY).append(",");
+        json.append("\"x\":").append(requestX).append(",");
+        json.append("\"top\":").append(top).append(",");
+        json.append("\"left\":").append(left).append(",");
+        json.append("\"bottom\":").append(bottom).append(",");
+        json.append("\"right\":").append(right).append(",");
+        json.append("\"info\":[");
+
+        for (int y = top; y <= bottom; y++) {
+            if (y > top) json.append(",");
+            json.append("[");
+            for (int x = left; x <= right; x++) {
+                if (x > left) json.append(",");
+                json.append("\"").append(tileMap.getTileOrBlank(y, x)).append("\"");
+            }
+            json.append("]");
         }
 
-        gameState.setPlayerPosition(newY, newX);
+        json.append("]}");
 
-        String json = "{\"y\":" + newY + ",\"x\":" + newX + "}";
-        byte[] body = json.getBytes(StandardCharsets.UTF_8);
+        byte[] body = json.toString().getBytes(StandardCharsets.UTF_8);
         exchange.getResponseHeaders().set("Content-Type", "application/json");
         exchange.sendResponseHeaders(200, body.length);
         try (OutputStream os = exchange.getResponseBody()) {
